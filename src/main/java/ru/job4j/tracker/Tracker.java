@@ -1,5 +1,6 @@
 package ru.job4j.tracker;
 
+import javax.print.attribute.standard.NumberUp;
 import java.util.Arrays;
 
 public class Tracker {
@@ -71,5 +72,41 @@ public class Tracker {
         }
         itemsResult = Arrays.copyOf(itemsResult, size);
         return itemsResult;
+    }
+
+    /**
+     * Метод редактироует название заявки с указанным id
+     * @param id - id заявки, которую необходимо отредактировать
+     * @param item - объект с новым именем
+     */
+    public boolean replace(int id, Item item) {
+        boolean result = false;
+        for (int index = 0; index < this.size; index++) {
+            if (items[index].getId() == id) {
+                items[index].setName(item.getName());
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Метод удаляет заявку с указанным id
+     * @param id - id заявки, которую необходимо удалить
+     */
+    public boolean delete(int id) {
+        boolean result = false;
+        for (int index = 0; index < this.size; index++) {
+            if (items[index].getId() == id) {
+                for (int i = id - 1; i < this.size - 1; i++) {
+                    items[i].setName(items[i + 1].getName());
+                    items[i].setId(items[i + 1].getId());
+                }
+                size--;
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 }
