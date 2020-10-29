@@ -26,9 +26,7 @@ public class StartUITest {
     public void whenReplaceItem() {
         Output out = new StubOutput();
         Tracker tracker = new Tracker();
-        /* Добавим в tracker новую заявку */
         Item item = tracker.add(new Item("Replaced item"));
-        /* Входные данные должны содержать ID добавленной заявки item.getId() */
         String replacedName = "New item name";
         Input in = new StubInput(
                 new String[] {"0", String.valueOf(item.getId()), replacedName, "1"}
@@ -45,9 +43,7 @@ public class StartUITest {
     public void whenDeleteItem() {
         Output out = new StubOutput();
         Tracker tracker = new Tracker();
-        /* Добавим в tracker новую заявку */
         Item item = tracker.add(new Item("Deleted item"));
-        /* Входные данные должны содержать ID добавленной заявки item.getId() */
         Input in = new StubInput(
                 new String[] {"0", String.valueOf(item.getId()), "1"}
         );
@@ -58,4 +54,59 @@ public class StartUITest {
         new StartUI(out).init(in, tracker, actions);
         assertThat(tracker.findById(item.getId()), is(nullValue()));
     }
+
+    @Test
+    public void whenShowAllItems() {
+        Output out = new StubOutput();
+        Tracker tracker = new Tracker();
+        Item item = tracker.add(new Item("item"));
+        Input in = new StubInput(
+                new String[] {"0", "1"}
+        );
+        UserAction[] actions = {
+                new ShowAllAction(out),
+                new ExitAction(out)
+        };
+        new StartUI(out).init(in, tracker, actions);
+        assertThat(out.toString(), is("Menu." + System.lineSeparator() + "0. Show all Items" + System.lineSeparator() + "1. Exit" +
+                System.lineSeparator() +  "id: " + item.getId() + ", name: " + item.getName() + System.lineSeparator()
+                + "Menu." + System.lineSeparator() + "0. Show all Items" + System.lineSeparator() + "1. Exit" + System.lineSeparator()));
+    }
+
+    @Test
+    public void whenFindItemById() {
+        Output out = new StubOutput();
+        Tracker tracker = new Tracker();
+        Item item = tracker.add(new Item("item"));
+        Input in = new StubInput(
+                new String[] {"0", String.valueOf(item.getId()), "1"}
+        );
+        UserAction[] actions = {
+                new FindByIdAction(out),
+                new ExitAction(out)
+        };
+        new StartUI(out).init(in, tracker, actions);
+        assertThat(out.toString(), is("Menu." + System.lineSeparator() + "0. Find Item by Id" + System.lineSeparator() + "1. Exit" +
+                System.lineSeparator() +  "Item with id " + item.getId() + ": " + item.getName() + System.lineSeparator()
+                + "Menu." + System.lineSeparator() + "0. Find Item by Id" + System.lineSeparator() + "1. Exit" + System.lineSeparator()));
+    }
+
+    @Test
+    public void whenFindItemByName() {
+        Output out = new StubOutput();
+        Tracker tracker = new Tracker();
+        Item item = tracker.add(new Item("item"));
+        Input in = new StubInput(
+                new String[] {"0", item.getName(), "1"}
+        );
+        UserAction[] actions = {
+                new FindByNameAction(out),
+                new ExitAction(out)
+        };
+        new StartUI(out).init(in, tracker, actions);
+        assertThat(out.toString(), is("Menu." + System.lineSeparator() + "0. Find Item by Name" + System.lineSeparator() + "1. Exit" +
+                System.lineSeparator() +  "id: " + item.getId() + ", name: " + item.getName() + System.lineSeparator()
+                + "Menu." + System.lineSeparator() + "0. Find Item by Name" + System.lineSeparator() + "1. Exit" + System.lineSeparator()));
+    }
+
 }
