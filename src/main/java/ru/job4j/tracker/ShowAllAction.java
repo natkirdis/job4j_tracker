@@ -6,7 +6,7 @@ public class ShowAllAction implements UserAction {
     public ShowAllAction(Output out) {
         this.out = out;
     }
-    
+
     @Override
     public String name() {
         return "Show all Items";
@@ -16,7 +16,7 @@ public class ShowAllAction implements UserAction {
     public boolean execute(Input input, Tracker tracker) {
         Item[] items = tracker.findAll();
         for (Item item : items) {
-            System.out.println("id: " + item.getId() + ", name: " + item.getName());
+            out.println("id: " + item.getId() + ", name: " + item.getName());
         }
         return true;
     }
