@@ -10,10 +10,6 @@ public class TrackerEagerLoading {
         return INSTANCE;
     }
 
-    public Item add(Item item) {
-        return item;
-    }
-
     public static void main(String[] args) {
         Tracker tracker = TrackerEagerLoading.getInstance();
     }

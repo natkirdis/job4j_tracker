@@ -7,8 +7,4 @@ public enum TrackerEnum {
     public Tracker getTracker() {
         return tracker;
     }
-
-    public Item add(Item item) {
-        return item;
-    }
 }
