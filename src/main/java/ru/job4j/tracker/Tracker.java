@@ -1,23 +1,15 @@
 package ru.job4j.tracker;
 
 import javax.print.attribute.standard.NumberUp;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Tracker {
     /**
      * Массив для хранение заявок
      */
-    private final Item[] items = new Item[100];
-
-    /**
-     * Указатель ячейки для новой заявки
-     */
-    private int ids = 1;
-
-    /**
-     * Счетчик для присваивания уникального id при добавлении заявки
-     */
-    private int size = 0;
+    private final List<Item> items = new ArrayList<>();
 
     /**
      * Метод для добавление заявки в хранилище
@@ -25,8 +17,8 @@ public class Tracker {
      * @return Item добавленная заявка
      */
     public Item add(Item item) {
-        item.setId(ids++);
-        items[size++] = item;
+        item.setId(items.size() + 1);
+        items.add(item);
         return item;
     }
 
@@ -34,8 +26,8 @@ public class Tracker {
      * Метод находит все заявки с заданным именем заявки
      * @return возвращает массив заявок с заданным именем без null элементов
      */
-    public Item[] findAll(){
-        return Arrays.copyOf(items, size);
+    public List<Item> findAll(){
+        return items;
     }
 
     /**
@@ -45,8 +37,8 @@ public class Tracker {
      */
     public Item findById(int id) {
         Item rsl = null;
-        for (int index = 0; index < this.size; index++) {
-            Item item = items[index];
+        for (int index = 0; index < items.size(); index++) {
+            Item item = items.get(index);
             if (item.getId() == id) {
                 rsl = item;
                 break;
@@ -60,17 +52,15 @@ public class Tracker {
      * @param key имя заявки
      * @return возвращает массив заявок с заданным именем без null элементов
      */
-    public Item[] findByName(String key) {
-        Item[] itemsResult = new Item[this.size];
+    public List<Item> findByName(String key) {
+        List<Item> itemsResult = new ArrayList<>();
         int size = 0;
-        for (int index = 0; index < this.size; index++) {
-            Item item = items[index];
+        for (int index = 0; index < items.size(); index++) {
+            Item item = items.get(index);
             if (item.getName().equals(key)) {
-                itemsResult[size] = item;
-                size++;
+                itemsResult.add(item);
             }
         }
-        itemsResult = Arrays.copyOf(itemsResult, size);
         return itemsResult;
     }
 
@@ -81,9 +71,9 @@ public class Tracker {
      */
     public boolean replace(int id, Item item) {
         boolean result = false;
-        for (int index = 0; index < this.size; index++) {
-            if (items[index].getId() == id) {
-                items[index].setName(item.getName());
+        for (int index = 0; index < items.size(); index++) {
+            if (items.get(index).getId() == id) {
+                items.get(index).setName(item.getName());
                 result = true;
             }
         }
@@ -96,17 +86,29 @@ public class Tracker {
      */
     public boolean delete(int id) {
         boolean result = false;
-        for (int index = 0; index < this.size; index++) {
-            if (items[index].getId() == id) {
-                for (int i = id - 1; i < this.size - 1; i++) {
-                    items[i].setName(items[i + 1].getName());
-                    items[i].setId(items[i + 1].getId());
-                }
-                size--;
+        int index = this.findIndex(id);
+        if (index > -1) {
+            this.items.remove(index);
+            result = true;
+        }
+        return result;
+    }
+
+    /**
+     * Поиск индекса заявки по id.
+     * @param id Id заявки.
+     * @return Индекс заявки в трекере. -1 означает отсутствие заявки в трекере.
+     */
+    private int findIndex(int id) {
+        boolean result = false;
+        int index = 0;
+        for (Item item : this.items) {
+            if (item != null && id == item.getId()) {
                 result = true;
                 break;
             }
+            index++;
         }
-        return result;
+        return result ? index : -1;
     }
 }
