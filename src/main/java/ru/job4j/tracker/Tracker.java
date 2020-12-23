@@ -71,11 +71,10 @@ public class Tracker {
      */
     public boolean replace(int id, Item item) {
         boolean result = false;
-        for (int index = 0; index < items.size(); index++) {
-            if (items.get(index).getId() == id) {
-                items.get(index).setName(item.getName());
-                result = true;
-            }
+        int index = this.findIndex(id);
+        if (index > -1) {
+            items.set(index, item);
+            result = true;
         }
         return result;
     }
@@ -103,7 +102,7 @@ public class Tracker {
         boolean result = false;
         int index = 0;
         for (Item item : this.items) {
-            if (item != null && id == item.getId()) {
+            if (id == item.getId()) {
                 result = true;
                 break;
             }
