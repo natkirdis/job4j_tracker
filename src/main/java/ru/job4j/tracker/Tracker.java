@@ -73,6 +73,7 @@ public class Tracker {
         boolean result = false;
         int index = this.findIndex(id);
         if (index > -1) {
+            item.setId(id);
             items.set(index, item);
             result = true;
         }
